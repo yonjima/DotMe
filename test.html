@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>DotMe - 最終分離テスト</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    h2 { color: #333; }
+    canvas { 
+      border: 2px solid #000; 
+      margin: 10px 0;
+      /* CSSでの表示サイズを固定 */
+      width: 300px; 
+      height: 300px;
+      object-fit: contain;
+    }
+    #controls { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <h2>DotMe - 最終分離テスト</h2>
+  <p>このページで画像を選択して、右側の黒枠にドット絵が表示されるか確認してください。</p>
+  
+  <input type="file" id="fileInput" accept="image/*">
+  <hr>
+
+  <div>
+    <strong>オリジナル:</strong>
+    <canvas id="original-canvas"></canvas>
+  </div>
+  <div>
+    <strong>ドット絵:</strong>
+    <canvas id="pixel-canvas"></canvas>
+  </div>
+
+  <!-- ローカルのライブラリを読み込む -->
+  <script src="./pixelit.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // ライブラリ読み込みチェック
+      if (typeof pixelit === 'undefined') {
+        alert('致命的エラー: pixelit.jsが読み込めませんでした。test.htmlとpixelit.jsが同じフォルダにあるか確認してください。');
+        return;
+      }
+
+      const fileInput = document.getElementById('fileInput');
+      const originalCanvas = document.getElementById('original-canvas');
+      const pixelCanvas = document.getElementById('pixel-canvas');
+      const ctx = originalCanvas.getContext('2d');
+
+      fileInput.addEventListener('change', function (e) {
+        if (!e.target.files || !e.target.files[0]) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            console.log(`画像読み込み完了: ${img.naturalWidth}x${img.naturalHeight}`);
+
+            // canvasの内部的な解像度を画像のサイズに合わせる
+            originalCanvas.width = img.naturalWidth;
+            originalCanvas.height = img.naturalHeight;
+            pixelCanvas.width = img.naturalWidth;
+            pixelCanvas.height = img.naturalHeight;
+
+            // オリジナルを描画
+            ctx.drawImage(img, 0, 0);
+            console.log('オリジナル画像を描画しました。');
+
+            // pixelitを初期化
+            const p = new pixelit({
+              from: originalCanvas,
+              to: pixelCanvas,
+            });
+
+            // 強制的に、目に見える設定でドット絵化を実行
+            p.setScale(40) // 粗く
+             .setPalette(pixelit.palette().bw) // 白黒
+             .pixelate()
+             .draw();
+            
+            console.log('ドット絵の描画処理を呼び出しました。');
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      });
+    });
+  </script>
+
+</body>
+</html>

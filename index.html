@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DotMe - 画像をドット絵に変換</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-3">
+        <h1>DotMe - ドットミー</h1>
+        <p class="lead">画像をレトロなドット絵に変換！</p>
+    </header>
+
+    <main class="container my-5">
+        <div class="row g-5">
+            <!-- Control Panel -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">⚙️ コントロールパネル</h5>
+                        <hr>
+                        <div class="mb-3">
+                            <label for="fileInput" class="form-label">画像を選択</label>
+                            <input class="form-control" type="file" id="fileInput" accept="image/png, image/jpeg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="scale" class="form-label">ドットの粗さ: <span id="scaleValue">15</span></label>
+                            <input type="range" class="form-range" id="scale" min="1" max="50" value="15">
+                        </div>
+                        <div class="mb-3">
+                            <label for="palette" class="form-label">カラーパレット</label>
+                            <select class="form-select" id="palette">
+                                <option value="0" selected>元の色</option>
+                                <option value="1">モノクロ</option>
+                                <option value="2">8色</option>
+                                <option value="3">16色</option>
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <button id="downloadPngBtn" class="btn btn-primary" disabled>PNGでダウンロード</button>
+                            <button id="downloadJpegBtn" class="btn btn-secondary" disabled>JPEGでダウンロード</button>
+                        </div>
+
+                        <hr>
+                        <h5>SNSでシェア</h5>
+                        <div class="d-flex justify-content-around mt-3">
+                            <button id="shareXBtn" class="btn btn-info btn-lg"><i class="fab fa-x-twitter"></i> X</button>
+                            <button id="shareThreadsBtn" class="btn btn-dark btn-lg"><i class="fab fa-threads"></i> Threads</button>
+                            <button id="shareLineBtn" class="btn btn-success btn-lg"><i class="fab fa-line"></i> LINE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Area -->
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>オリジナル</h5>
+                        <div class="preview-box bg-light">
+                            <canvas id="original-canvas"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>ドット絵</h5>
+                        <div class="preview-box bg-light">
+                            <canvas id="pixel-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center text-muted py-4 mt-auto">
+        <p>&copy; 2025 DotMe</p>
+    </footer>
+
+    <!-- pixelit.js is no longer used -->
+    <script src="app.js"></script>
+</body>
+</html>
