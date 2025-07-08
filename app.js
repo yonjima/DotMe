@@ -112,6 +112,35 @@ document.addEventListener('DOMContentLoaded', () => {
     scaleSlider.addEventListener('change', drawPixelatedImage);
     paletteSelect.addEventListener('change', drawPixelatedImage);
 
+    // --- 5. DOWNLOAD HANDLERS ---
+    downloadPngBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'dotme-pixel.png';
+        link.href = pixelCanvas.toDataURL('image/png');
+        link.click();
+    });
+
+    downloadJpegBtn.addEventListener('click', () => {
+        // Create a temporary canvas with a white background for JPEG
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = pixelCanvas.width;
+        tempCanvas.height = pixelCanvas.height;
+        
+        // Fill with white
+        tempCtx.fillStyle = '#FFFFFF';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        
+        // Draw the pixelated image on top
+        tempCtx.drawImage(pixelCanvas, 0, 0);
+
+        // Trigger download
+        const link = document.createElement('a');
+        link.download = 'dotme-pixel.jpeg';
+        link.href = tempCanvas.toDataURL('image/jpeg');
+        link.click();
+    });
+
     // --- 6. SNS SHARE HANDLERS ---
     const appUrl = window.location.href; // Current page URL
     const shareText = "画像をレトロなドット絵に変換！ #DotMe #ドットミー";
